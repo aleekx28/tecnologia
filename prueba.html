@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARES XI - Explorador Marciano</title>
+
+<style>
+/* =========================
+   RESET Y CONFIGURACIÓN BASE
+   ========================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #0b0f14;
+  color: #ffffff;
+  line-height: 1.6;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* =========================
+   CABECERA / NAVEGACIÓN
+   ========================= */
+nav {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.884);
+  padding: 15px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000;
+  gap: 20px;
+}
+
+  .logo {
+  font-size: 20px;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+.menu {
+  display: flex;
+  gap: 28px;
+}
+
+.menu a {
+  text-decoration: none;
+  color: white;
+  font-weight: 500;
+  transition: 0.2s;
+  font-size: 14px;
+}
+
+.menu a:hover {
+  color: #00bfff;
+}
+
+/* para que las secciones no queden tapadas por el nav */
+section { scroll-margin-top: 110px; }
+
+/* =========================
+   HERO PARALLAX PRINCIPAL
+   ========================= */
+.hero {
+height: 100vh;
+  background-image: url("https://images.unsplash.com/photo-1446776811953-b23d57bd21aa");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+}
+
+.hero h1{
+  font-size: 88px;
+  letter-spacing:6px;
+  text-transform:uppercase;
+  text-shadow: 0 0 20px rgba(0,0,0,0.6);
+}
+
+.hero p {
+  font-size: 20px;
+  margin-top: 20px;
+  color: #ffffff;
+}
+
+/* =========================
+   SECCIONES GENERALES
+   ========================= */
+.section {
+  padding: 100px 60px;
+}
+
+.section.dark {
+  background: #111820;
+}
+
+.section.light {
+  background: #161f29;
+}
+
+.section h2 {
+  font-size: 38px;
+  margin-bottom: 36px;
+  text-align: center;
+}
+
+/* =========================
+   VISIÓN AVANZADA
+   ========================= */
+.vision-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(280px,1fr));
+  gap:36px;
+}
+
+.vision-card{
+  background:#1d2732;
+  border-radius:12px;
+  overflow:hidden;
+  transition:0.35s ease;
+  border:1px solid #2d3a47;
+}
+
+.vision-card:hover{
+  transform:translateY(-8px);
+  border-color:#ff3c00;
+}
+
+.vision-card img{
+  width:100%;
+  height:220px;
+  object-fit:cover;
+}
+
+.encuadre-derecha{ object-position: right center; }
+
+.vision-card h3{
+  padding:18px 20px 8px 20px;
+  font-size:20px;
+  color:#ff3c00;
+}
+
+.vision-card p{
+  padding:0 20px 10px 20px;
+  font-size:14px;
+  color:#ccc;
+}
+
+.vision-card ul{
+  padding:0 20px 20px 35px;
+  font-size:13px;
+  color:#aaa;
+}
+
+/* =========================
+   ESPECIFICACIONES
+   ========================= */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 22px;
+}
+
+.card {
+  background: #1d2732;
+  padding: 26px;
+  border-radius: 8px;
+  transition: 0.25s;
+  border: 1px solid #2d3a47;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  border-color: #ff3c00;
+}
+
+.card h3 {
+  margin-bottom: 10px;
+  font-size: 18px;
+  color: #ff3c00;
+}
+
+/* =========================
+   PARALLAX SECUNDARIO
+   ========================= */
+.parallax-section {
+  height: 66vh;
+  background-image: url("https://wallpapers.com/images/hd/mars-4k-5ra95ed8yf6m6bhi.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.parallax-contenido {
+  padding: 28px 34px;
+  border-radius: 8px;
+  text-align: center;
+  background: rgba(0,0,0,0.45);
+}
+
+.parallax-section h2 {
+  font-size: 44px;
+  margin-bottom: 8px;
+  color: #fff;
+}
+
+.parallax-subtitulo {
+  margin: 12px auto 0 auto;
+  font-size: 17px;
+  color: #e6e6e6;
+  max-width: 760px;
+  line-height: 1.6;
+}
+
+/* =========================
+   MÓDULOS DE MISIÓN
+   ========================= */
+.module-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 34px;
+}
+
+.module {
+  background: #1a222c;
+  padding: 34px;
+  border-radius: 10px;
+}
+
+.module img {
+  width: 100%;
+  border-radius: 8px;
+  margin-bottom: 18px;
+}
+
+/* =========================
+   SECCIÓN PRESENTACIÓN Y NOTICIAS
+   ========================= */
+.promocion-grid {
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 36px;
+  align-items: start;
+}
+
+.video-embed {
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: #000;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #222;
+}
+
+.video-embed iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.noticias-fake {
+  background:#1d2732;
+  padding:18px;
+  border-radius:10px;
+  border:1px solid #2d3a47;
+}
+
+.noticia {
+  padding:12px 12px;
+  border-radius:8px;
+  background: rgba(255,255,255,0.02);
+  margin-bottom:12px;
+}
+
+.noticia h4 {
+  color:#ff3c00;
+  font-size:16px;
+  margin-bottom:6px;
+}
+
+.noticia p {
+  color:#ccc;
+  font-size:13px;
+}
+
+/* =========================
+   GALERÍA (DESPLEGABLE)
+   ========================= */
+.galeria-linea{
+  display:flex;
+  gap:20px;
+  margin-top:40px;
+}
+
+.galeria-linea img,
+.ver-mas{
+  flex:1;
+  height:220px;
+  border-radius:10px;
+  object-fit:cover;
+}
+
+.galeria-linea img{
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.galeria-linea img:hover{
+  transform:scale(1.04);
+}
+
+.ver-mas{
+  background:#1d2732;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:18px;
+  font-weight:bold;
+  color:#ff3c00;
+  cursor:pointer;
+  border:1px solid #2d3a47;
+  transition:0.3s;
+}
+
+.ver-mas:hover{
+  background:#ff3c00;
+  color:white;
+}
+
+/* MODAL */
+.modal-galeria{
+  display:none;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.85);
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+}
+
+.modal-contenido{
+  background:#111;
+  width:85%;
+  max-width:1100px;
+  padding:40px;
+  border-radius:12px;
+  position:relative;
+}
+
+.cerrar-modal{
+  position:absolute;
+  top:20px;
+  right:30px;
+  font-size:30px;
+  cursor:pointer;
+}
+
+.grid-completo{
+  margin-top:30px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:20px;
+}
+
+.grid-completo img{
+  width:100%;
+  height:200px;
+  object-fit:cover;
+  border-radius:8px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.grid-completo img:hover{
+  transform:scale(1.05);
+}
+
+/* VISOR */
+.visor-fullscreen{
+  display:none;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.55);
+  backdrop-filter:blur(6px);
+  justify-content:center;
+  align-items:center;
+  z-index:10000;
+}
+
+.visor-contenido{
+  position:relative;
+  max-width:1000px;
+  width:80%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.visor-contenido img{
+  width:100%;
+  max-height:80vh;
+  object-fit:contain;
+  border-radius:12px;
+  animation:fadeSmooth 0.3s ease;
+}
+
+@keyframes fadeSmooth{
+  from{opacity:0;transform:scale(0.97);}
+  to{opacity:1;transform:scale(1);}
+}
+
+.flecha{
+  position:absolute;
+  top:50%;
+  font-size:42px;
+  color:white;
+  cursor:pointer;
+  transform:translateY(-50%);
+  user-select:none;
+  padding:10px 15px;
+  background:rgba(0,0,0,0.4);
+  border-radius:8px;
+  transition:0.2s;
+}
+
+.flecha:hover{
+  background:rgba(0,0,0,0.7);
+}
+
+.izquierda{
+  left:-70px;
+}
+
+.derecha{
+  right:-70px;
+}
+
+.cerrar-visor{
+  position:absolute;
+  top:-50px;
+  right:0;
+  font-size:32px;
+  cursor:pointer;
+}
+.indicadores{
+  position:absolute;
+  bottom:-50px;
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;
+  gap:10px;
+}
+
+.punto{
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.4);
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.punto.activo{
+  background:white;
+  transform:scale(1.2);
+}
+.ver-mas-collage{
+  position:relative;
+  flex:1;
+  height:220px;
+  border-radius:10px;
+  overflow:hidden;
+  cursor:pointer;
+}
+
+.collage{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  grid-template-rows:1fr 1fr;
+  width:100%;
+  height:100%;
+}
+
+.collage img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+  filter:blur(2px) brightness(0.6);
+  pointer-events:none;
+}
+
+.texto-ver-mas{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  font-size:20px;
+  font-weight:bold;
+  color:white;
+  letter-spacing:1px;
+  pointer-events:none;
+}
+
+/* =========================
+   PRECIO Y FINANCIACIÓN
+   ========================= */
+.precio-section {
+  text-align: center;
+}
+
+.precio-box {
+  background: #1d2732;
+  max-width: 520px;
+  margin: auto;
+  padding: 40px;
+  border-radius: 12px;
+  border: 1px solid #2d3a47; 
+  transition: 0.3s;
+}
+
+.precio {
+  font-size: 42px;
+  font-weight: bold;
+  margin: 18px 0;
+  color: #ff3c00;
+}
+/* =========================
+   FORMULARIO Y FOOTER
+   ========================= */
+form {
+  max-width: 640px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+form input, form textarea {
+  padding: 14px;
+  margin-bottom: 16px;
+  border: none;
+  border-radius: 6px;
+  background: #1d2732;
+  color: white;
+}
+
+form button {
+  padding: 12px;
+  border: none;
+  background: #ff3c00;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+footer {
+  text-align: center;
+  padding: 36px;
+  background: #000;
+  font-size: 14px;
+  color: #aaa;
+}
+
+/* responsive */
+@media (max-width: 900px) {
+  .promocion-grid { grid-template-columns: 1fr; }
+  .gallery-grid.open { max-height: 2200px; }
+  .hero h1 { font-size: 48px; }
+  .module-grid { gap: 20px; }
+  .vision-grid { gap: 20px; }
+  nav { padding: 12px 18px; }
+  .menu { gap: 14px; font-size: 13px; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =========================
+     CABECERA PRINCIPAL
+     ========================= -->
+<nav>
+  <div class="logo">ARES XI</div>
+  <div class="menu">
+    <a href="#vision">Visión</a>
+    <a href="#informacion">Información</a>
+    <a href="#specs">Especificaciones</a>
+    <a href="#promocion">Promoción</a>
+    <a href="#galeria" id="nav-galeria">Galería</a>
+    <a href="#modulos">Módulos</a>
+    <a href="#precio">Precio</a>
+    <a href="#contacto">Contacto</a>
+  </div>
+</nav>
+
+<!-- =========================
+     HERO
+     ========================= -->
+<section class="hero" id="top">
+  <div>
+    <h1>ARES XI</h1>
+    <p>El nuevo estándar en exploración planetaria autónoma</p>
+  </div>
+</section>
+
+<!-- =========================
+     VISIÓN AVANZADA
+     ========================= -->
+<section id="vision" class="section dark">
+  <h2>Sistema de Visión Avanzado</h2>
+  <div class="vision-grid">
+    <div class="vision-card">
+      <img src="imagenes/luna.jpg" alt="luna">
+      <h3>Visión 8K Ultra HD</h3>
+      <p>Sensor óptico de 64 MP con estabilización giroscópica.</p>
+      <ul>
+        <li>Resolución 7680x4320</li>
+        <li>Zoom digital x40</li>
+        <li>Modo baja luz</li>
+      </ul>
+    </div>
+
+    <div class="vision-card">
+      <img src="imagenes/vision_termica.jpg" alt="termica">
+      <h3>Visión Térmica</h3>
+      <p>Detección de variaciones térmicas extremas.</p>
+      <ul>
+        <li>Rango -120°C a 80°C</li>
+        <li>Precisión 0.1°C</li>
+      </ul>
+    </div>
+
+    <div class="vision-card">
+      <img src="imagenes/lidar.jpg" class="encuadre-derecha" alt="lidar">
+      <h3>Escaneo 3D LIDAR</h3>
+      <p>Reconstrucción tridimensional del terreno.</p>
+      <ul>
+        <li>Alcance 300 m</li>
+        <li>Precisión milimétrica</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- =========================
+     INFORMACIÓN (sección vacía de ejemplo)
+     ========================= -->
+<section id="informacion" class="section light">
+  <h2>Información del Proyecto</h2>
+  <p style="max-width:900px;margin:auto;text-align:center;color:#dcdcdc;">
+    Esta sección recoge la descripción general del proyecto, objetivos científicos
+    y el equipo responsable. Puedes pegar aquí el texto largo que necesites o insertar
+    documentos y enlaces.
+  </p>
+</section>
+
+<!-- =========================
+     ESPECIFICACIONES
+     ========================= -->
+<section id="specs" class="section dark">
+  <h2>Especificaciones Técnicas</h2>
+  <div class="cards">
+    <div class="card">
+      <h3>Peso</h3>
+      <p>1.080 kg</p>
+    </div>
+    <div class="card">
+      <h3>Velocidad máxima</h3>
+      <p>5 km/h sobre terreno rocoso</p>
+    </div>
+    <div class="card">
+      <h3>Autonomía Energética</h3>
+      <p>14 años mediante generador RTG</p>
+    </div>
+    <div class="card">
+      <h3>Sensores</h3>
+      <p>Cámaras 8K, radar subterráneo, espectrómetro químico</p>
+    </div>
+    <div class="card">
+      <h3>Alcance Comunicación</h3>
+      <p>Enlace orbital hasta 400 millones km</p>
+    </div>
+    <div class="card">
+      <h3>Procesador</h3>
+      <p>CPU Rad-Hard 64 bits con IA embarcada</p>
+    </div>
+  </div>
+</section>
+
+<!-- =========================
+     PROMOCIÓN
+     ========================= -->
+<section id="promocion" class="section light">
+  <h2>Video presentación y noticias relacionadas</h2>
+
+  <div class="promocion-grid">
+    <div class="video-embed">
+      <!-- ejemplo de iframe; sustituye el src por tus vídeos futuros -->
+      <iframe src="https://www.youtube.com/embed/BjyhhV_ghc8" title="Vídeo promocional" allowfullscreen></iframe>
+    </div>
+
+    <aside class="noticias-fake">
+      <h3 style="color:#ffffff;margin-bottom:12px;">Noticias relacionadas</h3>
+
+      <div class="noticia">
+        <h4>ARES XI detecta 'ecos musicales' en cráter Hellas</h4>
+        <p>Nota de prensa: informes iniciales indican patrones acústicos que recuerdan a ritmos. Equipo científico alerta que la historia es una broma promocional.</p>
+      </div>
+
+      <div class="noticia">
+        <h4>Gobierno galáctico negocia compra de ARES XI</h4>
+        <p>Nota de prensa: varios tabloides especulan sobre una negociación interplanetaria. Contenido claramente inventado.</p>
+      </div>
+
+      <div class="noticia">
+        <h4>ARES XI protagoniza cortometraje rodado en el propio cráter</h4>
+        <p>Nota de prensa: el proyecto produce material audiovisual para promoción. Historia creada con fines demostrativos.</p>
+      </div>
+    </aside>
+  </div>
+</section>
+
+
+<!-- ========================= -->
+<!-- PARALLAX FRASE -->
+<!-- ========================= -->
+
+<section class="parallax-section">
+  <div class="parallax-contenido">
+    <h2>Diseñado para sobrevivir donde nadie más puede</h2>
+    <p class="parallax-subtitulo">
+      ARES X1 ha sido diseñado para superar los límites actuales de la exploración robótica. Capaz de operar en temperaturas de -120°C y tormentas de polvo marcianas, integra inteligencia artificial avanzada y sistemas redundantes de navegación autónoma.
+    </p>
+  </div>
+</section>
+
+<!-- =========================
+     GALERÍA (enlace del menú abre/colapsa)
+     ========================= -->
+<section id="galeria" class="section dark">
+  <h2>Galería</h2>
+
+  <div class="galeria-linea">
+    <img src="https://images.unsplash.com/photo-1502877338535-766e1452684a" alt="Robot 1">
+    <img src="https://images.unsplash.com/photo-1493238792000-8113da705763" alt="Robot 2">
+    <img src="https://images.unsplash.com/photo-1511919884226-fd3cad34687c" alt="Robot 3">
+
+   <div class="ver-mas-collage" onclick="abrirGaleria()">
+  <div class="collage">
+    <img src="imagenes/lidar.jpg">
+    <img src="imagenes/marte.jpg">
+    <img src="imagenes/vision_termica.jpg">
+    <img src="imagenes/luna.jpg">
+  </div>
+  <span class="texto-ver-mas">Ver más</span>
+</div>
+</section>
+
+<!-- MODAL GALERÍA COMPLETA -->
+<div id="modalGaleria" class="modal-galeria">
+  <div class="modal-contenido">
+    <span class="cerrar-modal" onclick="cerrarGaleria()">&times;</span>
+    <h3>Galería completa</h3>
+
+    <div class="grid-completo" id="gridCompleto">
+      <img src="https://images.unsplash.com/photo-1502877338535-766e1452684a">   <!-- las imagenes dentro del grid de la galería  -->
+      <img src="https://images.unsplash.com/photo-1493238792000-8113da705763">
+      <img src="https://images.unsplash.com/photo-1511919884226-fd3cad34687c">
+      <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470">
+      <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee">
+      <img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564">
+      <img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564">
+      <img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564">
+    </div>
+  </div>
+</div>
+
+<!-- VISOR FULLSCREEN -->
+<div id="visorFullscreen" class="visor-fullscreen">
+  <div class="visor-contenido">
+    <span class="cerrar-visor" onclick="cerrarVisor()">&times;</span>
+    <span class="flecha izquierda" onclick="cambiarImagen(-1)">&#10094;</span>
+
+    <div id="visorContenido"></div>
+
+    <span class="flecha derecha" onclick="cambiarImagen(1)">&#10095;</span>
+
+    <div class="indicadores" id="indicadores"></div>
+  </div>
+</div>
+
+<!-- =========================
+      MÓDULOS DE MISIÓN
+ ========================= -->
+<section id="modulos" class="section light">
+  <h2>Módulos de Misión</h2>
+  <div class="module-grid">
+    <div class="module">
+      <img src="imagenes/espacio.jpg" alt="navegacion">
+      <h3>Navegación Autónoma</h3>
+      <p>Planificación dinámica de rutas y evitación de obstáculos en tiempo real.</p>
+    </div>
+
+    <div class="module">
+      <img src="imagenes/lidar.jpg" alt="muestras">
+      <h3>Toma de Muestras</h3>
+      <p>Brazo robótico con taladro y análisis in situ.</p>
+    </div>
+  </div>
+</section>
+
+<!-- =========================
+     PRECIO
+     ========================= -->
+<section id="precio" class="section light precio-section">
+  <h2>Adquisición ARES XI</h2>
+
+  <div class="precio-box">
+    <p>Precio base</p>
+    <div class="precio">499.000 €</div>
+
+    <p class="financiacion">
+      Disponible con financiación al 12% tae desde 48 meses.
+      Cuotas aproximadas de 11.666 € / mes.
+    </p>
+  </div>
+</section>
+
+<!-- =========================
+     CONTACTO
+     ========================= -->
+<section id="contacto" class="section dark">
+  <h2>Solicita Información</h2>
+  <form action="https://formspree.io/f/your-form-id" method="POST">
+    <input type="text" name="nombre" placeholder="Nombre completo" required>
+    <input type="email" name="email" placeholder="Correo electrónico" required>
+    <textarea name="mensaje" rows="5" placeholder="Mensaje"></textarea>
+    <button type="submit">Enviar solicitud</button>
+  </form>
+</section>
+
+<footer>
+  © 2026 ARES Robotics Division
+</footer>
+
+<!-- =========================
+     GALERÍA
+     ========================= -->
+
+<script>
+let indiceActual=0;
+let imagenes=[];
+
+function abrirGaleria(){
+  document.getElementById("modalGaleria").style.display="flex";
+  imagenes=document.querySelectorAll("#gridCompleto img");
+
+  imagenes.forEach((img,index)=>{
+    img.onclick=function(){
+      indiceActual=index;
+      abrirVisor();
+    }
+  });
+}
+
+function cerrarGaleria(){
+  document.getElementById("modalGaleria").style.display="none";
+}
+
+function abrirVisor(){
+  document.getElementById("visorFullscreen").style.display="flex";
+  mostrarImagen();
+}
+
+function cerrarVisor(){
+  document.getElementById("visorFullscreen").style.display="none";
+}
+
+function cambiarImagen(direccion){
+  indiceActual+=direccion;
+
+  if(indiceActual<0){
+    indiceActual=imagenes.length-1;
+  }
+
+  if(indiceActual>=imagenes.length){
+    indiceActual=0;
+  }
+
+  mostrarImagen();
+}
+
+function mostrarImagen(){
+  const contenedor=document.getElementById("visorContenido");
+  contenedor.innerHTML="";
+  const img=imagenes[indiceActual].cloneNode();
+  contenedor.appendChild(img);
+
+  crearIndicadores();
+}
+
+document.getElementById("modalGaleria").addEventListener("click",function(e){
+  if(e.target.id==="modalGaleria"){
+    cerrarGaleria();
+  }
+}
+
+);
+
+document.getElementById("visorFullscreen").addEventListener("click",function(e){
+  if(e.target.id==="visorFullscreen"){
+    cerrarVisor();
+  }
+});
+function crearIndicadores(){
+  const contenedor=document.getElementById("indicadores");
+  contenedor.innerHTML="";
+
+  imagenes.forEach((_,index)=>{
+    const punto=document.createElement("div");
+    punto.classList.add("punto");
+
+    if(index===indiceActual){
+      punto.classList.add("activo");
+    }
+
+    punto.onclick=function(){
+      indiceActual=index;
+      mostrarImagen();
+    };
+
+    contenedor.appendChild(punto);
+  });
+}
+</script>
+</body>
+</html>
